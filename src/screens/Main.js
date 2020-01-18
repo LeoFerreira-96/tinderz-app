@@ -1,13 +1,29 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import{View, Image} from 'react-native';
 
 import logo from '../../assets/images/logo.png';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import api from '../store/api';
 
-export default ({navigation: {navigate}}) => {
+export default ({navigation: {getParam, navigate}}) => {
+    
+    const id = getParam('id';)
     const onLogout = useCallback( () => {
         navigate('login');
     }, [navigate]);
+
+    const loadUsers = useCallback( async () => {
+       const {data} = await api.get('/devs',{
+           headers:{
+               user: id,
+           },
+       })
+       setUsers()
+    },[id]);
+
+    useEffect (() => {
+       loadUsers(); 
+    },[loadUsers])
     return (
         <View style={{
             flex:1,
